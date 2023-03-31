@@ -5,23 +5,29 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         SetOutputDevice(request, sender, sendResponse);
     } else if(request.action == "getDeviceList") {
         // Get the audio device list .
-        navigator.mediaDevices.enumerateDevices().then( devices => {
-            audioDevices = devices.filter( device => device.kind === 'audiooutput');
-
-            // Send to the background page.
-            sendResponse(audioDevices);
-        });
+        GetDeviceList(request, sender, sendResponse);
         return true;
     }
 
   });
 
+function GetDeviceList(request, sender, sendResponse){
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+
+    navigator.mediaDevices.enumerateDevices().then( devices => {
+        audioDevices = devices.filter( device => device.kind === 'audiooutput');
+
+        // Send to the background page.
+        sendResponse(audioDevices);
+    });
+}
+
 function SetOutputDevice(request, sender, sendResponse){
     // Get the selected device ID from the message.
     var deviceId = request.deviceId;
 
-    // Brute force method to set the audio output device by finding all audio elements and setting the sink. CONVERT THIS TO CACHE!
-    let sinks = document.querySelectorAll('[class*="video"]')
+    // Brute force method to setting all *Literally all* node sinks to the selected device. 
+    let sinks = document.querySelectorAll('*');
     sinks.forEach(sink => {
         try{
             sink.setSinkId(deviceId);
@@ -30,15 +36,5 @@ function SetOutputDevice(request, sender, sendResponse){
             // console.log("Error setting sink: ", e);
         }
     })
-    
-    
-    // var ctx = new AudioContext( {sinkId: deviceId});
-    // // Set the audio output device to the selected device.
-    // ctx.setSinkId(deviceId)
-    // .then(res => {
-    //     console.log('Audio output device set to: ' + deviceId, res);
-    // })
-    // .catch(err => {
-    //     console.error('Error setting audio output device: ' + err);
-    // });
+
 }
