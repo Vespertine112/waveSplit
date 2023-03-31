@@ -8,7 +8,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         navigator.mediaDevices.enumerateDevices().then( devices => {
             audioDevices = devices.filter( device => device.kind === 'audiooutput');
 
-            console.log("SENDING DEVICES TO POPUP", audioDevices);
             // Send to the background page.
             sendResponse(audioDevices);
         });
@@ -21,15 +20,14 @@ function SetOutputDevice(request, sender, sendResponse){
     // Get the selected device ID from the message.
     var deviceId = request.deviceId;
 
-    console.log("SETTING DEVICE TO: ", deviceId, request);
-
     // Brute force method to set the audio output device by finding all audio elements and setting the sink. CONVERT THIS TO CACHE!
     let sinks = document.querySelectorAll('[class*="video"]')
     sinks.forEach(sink => {
         try{
             sink.setSinkId(deviceId);
+            console.log()
         } catch (e) {
-            console.log("Error setting sink: ", e);
+            // console.log("Error setting sink: ", e);
         }
     })
     

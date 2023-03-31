@@ -6,14 +6,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // Get a reference to the device list dropdown.
             var deviceList = document.getElementById('deviceList');
         
-                console.log("HELLO?");
-                console.log(response);
-
             // Populate the device list dropdown with the available devices.
             response.forEach(function(device) {
                 var option = document.createElement('option');
                 option.value = device.deviceId;
-                option.text = device.label;
+
+                let textLabel = getTextGroupsInParentheses(device.label);
+
+                option.label = textLabel[0];
+
                 deviceList.appendChild(option);
             });
         });
@@ -31,3 +32,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function getTextGroupsInParentheses(str) {
+    console.log(str);
+    let results = [];
+    let currentCount = 0;
+    let start = 0;
+    let end = 0;
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] === '(') {
+            if (currentCount == 0) start = i;
+            currentCount++;
+        } else if (str[i] === ')') {
+            currentCount--;
+            end = i;
+            if (currentCount == 0) {
+                results.push(str.substring(start + 1, end));
+            }
+        }
+    }
+    return results;
+
+}
+  
