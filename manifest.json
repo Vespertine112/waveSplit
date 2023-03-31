@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "waveSplit",
+    "version": "1.0",
+    "description": "An Extension to direct audio to a specific output device",
+    "permissions": [
+      "activeTab",
+      "tabs"
+    ],
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [{
+      "matches": ["<all_urls>"],
+      "js": ["audio.js"]
+    }],
+    "action": {
+      "default_title": "waveSplit",
+      "default_icon": "icon.png",
+      "default_popup": "waveSplit.html"
+    }
+  }
+  
