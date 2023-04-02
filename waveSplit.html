@@ -7,9 +7,19 @@
   </head>
   <body>
     <h1>Select an Audio Output Device</h1>
-    <select id="deviceList">
-      <option disabled selected value> -- select an output device -- </option>
-    </select>
+    <hr>
+    <div class="controls">
+      <select id="deviceList">
+        <option disabled selected value> -- select an output device -- </option>
+      </select>
+      <div id="volumeContainer">
+        <label for="volumeSlider">Volume:</label>
+        <div class="sliderAndLabel">
+          <input type="range" min="0" max="100" value="50" class="slider" id="volumeSlider">
+          <div id="volumePercentage">0%</div>
+        </div>
+      </div>
+    </div>
     <script src="popup.js"></script>
   </body>
 </html>

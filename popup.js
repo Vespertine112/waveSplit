@@ -21,19 +21,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });  
 
     // Listen for changes to the device list selection & send the selected device ID to the content script to change output.
-    deviceList.addEventListener('change', function() {
-        console.log(typeof this.value);
+    deviceList.addEventListener('change', function(){
         id = String(this.value);
+        console.log(id);
 
         chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { action: 'setOutputDevice', deviceId: id}, function(response) {});
         });  
         
     });
+
+    let volumeSlider = document.getElementById('volumeSlider');
+    volumeSlider.addEventListener('input', function (){
+        // Update the % label
+        let volumeLabel = document.getElementById('volumePercentage');
+        volumeLabel.innerHTML = volumeSlider.value + "%";
+
+        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { action: 'setVolume', volume: volumeSlider.value}, function(response) {});
+        });  
+    });
+
 });
 
 function getTextGroupsInParentheses(str) {
-    console.log(str);
     let results = [];
     let currentCount = 0;
     let start = 0;
